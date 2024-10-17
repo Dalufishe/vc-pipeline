@@ -2,7 +2,7 @@ import localFont from "next/font/local";
 import Flow from "@/components/Flow/Flow";
 import { ContextMenu } from "@radix-ui/themes";
 import { useFlowData } from "@/provider/FlowProvider";
-import { MouseEvent } from "react";
+import { MouseEvent, useState } from "react";
 import Head from "next/head";
 
 export default function Home() {
@@ -20,7 +20,6 @@ export default function Home() {
 function HomePageContextMenu(props: { trigger: React.ReactNode }) {
   const { nodes, setNodes, edges } = useFlowData();
 
-
   const menus = [
     {
       title: "Start Flow",
@@ -29,7 +28,9 @@ function HomePageContextMenu(props: { trigger: React.ReactNode }) {
         fetch("/api/flow/start", {
           method: "POST",
           body: JSON.stringify({ nodes, edges }),
-        });
+        })
+          .then((data) => data.json())
+          .then((json) => alert(JSON.stringify(json)));
       },
     },
     {

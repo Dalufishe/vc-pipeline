@@ -11,7 +11,7 @@ id_value, from_value = parse_args()
 def process():
     inputs = requests.get("http://127.0.0.1:" + from_value).json()
 
-    inputs["data"]["counter"] += 45
+    inputs["data"]["counter"] += 40
 
     return jsonify(inputs)
 

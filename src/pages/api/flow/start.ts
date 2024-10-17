@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { spawn } from "child_process";
+import os from "os";
 
 let runningProcesses: number[] = [];
 
@@ -28,16 +29,40 @@ export default async function handler(
 
     // Start new processes using spawn
     nodes.forEach((node) => {
-      console.log(`${node.data.pythonPath} ${node.data.projectPath}`);
-      const child = spawn(node.data.pythonPath, [
-        node.data.projectPath,
-        `id=${5000 + Number(node.id)}`,
-        `order=${orderedSequence.map((o) => 5000 + Number(o)).join("-")}`,
-        `from=${
-          5000 +
-          Number(orderedSequence[orderedSequence.indexOf(node.id) - 1] || 0)
-        }`,
-      ]);
+      const isWindows = os.platform() === "win32";
+      const condaEnv = node.data.pythonPath; // This is the path to your Conda environment
+
+      let command, args;
+
+      if (isWindows) {
+        // Windows-specific: activate Conda environment and run Python script
+        command = "cmd.exe";
+        args = [
+          "/c",
+          `conda activate ${condaEnv} && python ${node.data.projectPath}`,
+          `id=${5000 + Number(node.id)}`,
+          `order=${orderedSequence.map((o) => 5000 + Number(o)).join("-")}`,
+          `from=${
+            5000 +
+            Number(orderedSequence[orderedSequence.indexOf(node.id) - 1] || 0)
+          }`,
+        ];
+      } else {
+        // macOS or Linux: activate Conda environment and run Python script
+        command = "bash";
+        args = [
+          "-c",
+          `"source activate ${condaEnv} && python ${node.data.projectPath}`,
+          `id=${5000 + Number(node.id)}`,
+          `order=${orderedSequence.map((o) => 5000 + Number(o)).join("-")}`,
+          `from=${
+            5000 +
+            Number(orderedSequence[orderedSequence.indexOf(node.id) - 1] || 0)
+          }"`,
+        ];
+      }
+
+      const child = spawn(command, args, { shell: true });
 
       // Store the PID of the running process
       runningProcesses.push(child.pid);
@@ -55,7 +80,7 @@ export default async function handler(
         console.log(`Process exited with code: ${code}`);
       });
     });
-
+    
     setTimeout(() => {
       (async function () {
         const result = await fetch(
@@ -63,13 +88,12 @@ export default async function handler(
             (5000 + Number(orderedSequence[orderedSequence.length - 1]))
         );
         const jsonResult = await result.json();
-        console.log(jsonResult);
+        res.status(200).json({ status: "success", data: jsonResult });
       })();
-    }, 1000);
-
-    res.status(200).json({ status: "success" });
+    }, 2000);
   }
 }
+
 function getOrderedSequence(edges) {
   const sources = new Set();
   const targets = new Set();

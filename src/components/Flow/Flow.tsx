@@ -14,10 +14,42 @@ import { useFlowData } from "@/provider/FlowProvider";
 
 const nodeTypes = { card: Card };
 
-const initialNodes = [];
+const initialNodes = [
+  {
+    id: "1",
+    position: { x: 0, y: 200 },
+    type: "card",
+    data: {
+      pythonPath: "python",
+      projectPath:
+        "C:\\Users\\user\\Desktop\\Dalufishe\\Program\\Project\\正式項目\\vc-pipeline\\server\\python-test-servers\\a.py",
+    },
+  },
+  {
+    id: "2",
+    position: { x: 500, y: 200 },
+    type: "card",
+    data: {
+      pythonPath: "python",
+      projectPath:
+        "C:\\Users\\user\\Desktop\\Dalufishe\\Program\\Project\\正式項目\\vc-pipeline\\server\\python-test-servers\\b.py",
+    },
+  },
+  {
+    id: "3",
+    position: { x: 1000, y: 200 },
+    type: "card",
+    data: {
+      pythonPath: "python",
+      projectPath:
+        "C:\\Users\\user\\Desktop\\Dalufishe\\Program\\Project\\正式項目\\vc-pipeline\\server\\python-test-servers\\c.py",
+    },
+  },
+];
 
 const initialEdges = [
-  //   { id: "e1-2", source: "1", target: "2" }
+     { id: "e1-1", source: "1", target: "2" },
+     { id: "e1-2", source: "2", target: "3" }
 ];
 
 export default function Flow() {

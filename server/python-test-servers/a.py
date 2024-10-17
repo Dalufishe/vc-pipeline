@@ -16,7 +16,8 @@ def process():
     # #######
     # #######
     # #######
-    outputs = {"data": {"counter": 9}}
+    
+    outputs = {"data": {"counter": 44}} 
     
     return jsonify(outputs)
 
@@ -25,3 +26,5 @@ if __name__ == "__main__":
     app.run(port=id_value)
 
 
+def handler(i):
+    return None
