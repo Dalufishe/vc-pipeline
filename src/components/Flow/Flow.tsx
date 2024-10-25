@@ -14,53 +14,25 @@ import { useFlowData } from "@/provider/FlowProvider";
 
 const nodeTypes = { card: Card };
 
-const initialNodes = [
-  {
-    id: "1",
-    position: { x: 0, y: 200 },
-    type: "card",
-    data: {
-      pythonPath: "python",
-      projectPath:
-        "C:\\Users\\user\\Desktop\\Dalufishe\\Program\\Project\\正式項目\\vc-pipeline\\server\\python-test-servers\\a.py",
-    },
-  },
-  {
-    id: "2",
-    position: { x: 500, y: 200 },
-    type: "card",
-    data: {
-      pythonPath: "python",
-      projectPath:
-        "C:\\Users\\user\\Desktop\\Dalufishe\\Program\\Project\\正式項目\\vc-pipeline\\server\\python-test-servers\\b.py",
-    },
-  },
-  {
-    id: "3",
-    position: { x: 1000, y: 200 },
-    type: "card",
-    data: {
-      pythonPath: "python",
-      projectPath:
-        "C:\\Users\\user\\Desktop\\Dalufishe\\Program\\Project\\正式項目\\vc-pipeline\\server\\python-test-servers\\c.py",
-    },
-  },
-];
-
-const initialEdges = [
-     { id: "e1-1", source: "1", target: "2" },
-     { id: "e1-2", source: "2", target: "3" }
-];
-
 export default function Flow() {
   // Flow 資料
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+  const [nodes, setNodes, onNodesChange] = useNodesState([]);
+  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+
+  // 初始化
+  useEffect(() => {
+    setNodes(JSON.parse(localStorage.getItem("nodes")));
+    setEdges(JSON.parse(localStorage.getItem("edges")));
+  }, []);
 
   // 同步狀態
   const { setFlowData, setNodes: setEdgesB } = useFlowData();
   useEffect(() => {
+    // 同步到狀態管理
     setFlowData({ nodes, setNodes, edges, setEdges });
+    // 同步到 localstorage
+    localStorage.setItem("nodes", JSON.stringify(nodes));
+    localStorage.setItem("edges", JSON.stringify(edges));
   }, [nodes, setNodes, edges, setEdges]);
 
   const onConnect = useCallback(
@@ -69,13 +41,6 @@ export default function Flow() {
     },
     [setEdges]
   );
-
-  // useEffect(() => {
-  //   fetch("/api/flow/register", {
-  //     method: "POST",
-  //     body: JSON.stringify({ nodes, edges }),
-  //   });
-  // }, [nodes, edges]);
 
   return (
     <div className="w-screen h-screen relative">

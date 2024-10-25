@@ -1,20 +1,19 @@
-from flask import Flask, request, jsonify
-import requests
-from parse_args import parse_args
-
-app = Flask(__name__)
-
-id_value, from_value = parse_args()
+from pipeline_api import Node
 
 
-@app.route("/")
-def process():
-    inputs = requests.get("http://127.0.0.1:" + from_value).json()
-    inputs["data"]["counter"] += 3
-    return jsonify(inputs)
+def handler(inputs):
+    return {
+        **inputs,
+        "data": {"counter": inputs["data"]["counter"] + 1},
+        "view": {
+            # "text": "Vesuvius Challenge",
+            # "image": "D:/vesuvius-project/vc-pipeline/public/ferrari.webp",
+            # "obj": "D:/vesuvius-project/vc-pipeline/public/test.obj",
+            "nrrd": "D:/vesuvius-project/vc-pipeline/public/test.nrrd",
+            
+        },
+    }
 
 
 if __name__ == "__main__":
-    app.run(port=id_value)
-
-
+    Node(handler)

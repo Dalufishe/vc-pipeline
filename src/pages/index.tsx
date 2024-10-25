@@ -1,37 +1,52 @@
-import localFont from "next/font/local";
 import Flow from "@/components/Flow/Flow";
 import { ContextMenu } from "@radix-ui/themes";
 import { useFlowData } from "@/provider/FlowProvider";
 import { MouseEvent, useState } from "react";
 import Head from "next/head";
+import View from "@/components/View/View";
 
 export default function Home() {
+  const { nodes, edges } = useFlowData();
+
+  const [result, setResult] = useState({});
+
+  const flowStartHandler = () => {
+    fetch("/api/flow/start", {
+      method: "POST",
+      body: JSON.stringify({ nodes, edges }),
+    })
+      .then((data) => data.json())
+      .then((json) => {
+        setResult(json);
+      });
+  };
+
   return (
-    <HomePageContextMenu
-      trigger={
-        <div>
-          <Flow />
-        </div>
-      }
-    />
+    <div className="overflow-hidden relative">
+      <HomePageContextMenu
+        onFlowStart={flowStartHandler}
+        trigger={
+          <div>
+            <Flow />
+          </div>
+        }
+      />
+      <View result={result} />
+    </div>
   );
 }
 
-function HomePageContextMenu(props: { trigger: React.ReactNode }) {
-  const { nodes, setNodes, edges } = useFlowData();
+function HomePageContextMenu(props: {
+  trigger: React.ReactNode;
+  onFlowStart: () => void;
+}) {
+  const { nodes, setNodes } = useFlowData();
 
   const menus = [
     {
       title: "Start Flow",
       shortcut: "⌘ Enter",
-      handler: () => {
-        fetch("/api/flow/start", {
-          method: "POST",
-          body: JSON.stringify({ nodes, edges }),
-        })
-          .then((data) => data.json())
-          .then((json) => alert(JSON.stringify(json)));
-      },
+      handler: props.onFlowStart,
     },
     {
       title: "Insert Node",
