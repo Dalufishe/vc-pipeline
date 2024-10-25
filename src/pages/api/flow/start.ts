@@ -55,11 +55,12 @@ export default async function handler(
       } else {
         // macOS or Linux: activate Conda environment and run Python script
         command = "bash";
+        const activate = condaEnv.endsWith("/bin/activate") ? '' : 'activate'; // env : conda
         args = [
           "-c",
           condaEnv === "python"
             ? `"python ${node.data.projectPath}`
-            : `"source activate ${condaEnv}&&cd ${path.dirname(
+            : `"source ${activate} ${condaEnv}&&cd ${path.dirname(
                 node.data.projectPath
               )}&&python ${path.basename(node.data.projectPath)}`,
           `--id ${5000 + Number(node.id)}`,
@@ -98,7 +99,7 @@ export default async function handler(
         const jsonResult = await result.json();
         res.status(200).json({ status: "success", data: jsonResult });
       })();
-    }, 2000);
+    }, 20000);
   }
 }
 
