@@ -7,9 +7,9 @@ def handler(inputs):
         "data": {"counter": inputs["data"]["counter"] + 1},
         "view": {
             # "text": "Vesuvius Challenge",
-            # "image": "D:/vesuvius-project/vc-pipeline/public/ferrari.webp",
-            # "obj": "D:/vesuvius-project/vc-pipeline/public/test.obj",
-            "nrrd": "D:/vesuvius-project/vc-pipeline/public/test.nrrd",
+            "image": "/Users/yao/Desktop/test.png",
+            # "obj": "/Users/yao/Desktop/test.obj",
+            # "nrrd": "/Users/yao/Desktop/cube.nrrd",
             
         },
     }

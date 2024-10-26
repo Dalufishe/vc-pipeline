@@ -35,9 +35,9 @@ export default function Card(props: NodeProps<CardNode>) {
           {/* 檔案名稱 */}
           <h3 className="text-xl">
             {projectPath
-              ? projectPath.split("\\")[projectPath.split("\\").length - 2] +
+              ? projectPath.split("/")[projectPath.split("/").length - 2] +
                 "/" +
-                projectPath.split("\\")[projectPath.split("\\").length - 1]
+                projectPath.split("/")[projectPath.split("/").length - 1]
               : "Empty"}
           </h3>
           <AlertDialog.Root>

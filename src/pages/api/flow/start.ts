@@ -1,7 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { spawn } from "child_process";
 import os from "os";
-import path from "path";
 
 let runningProcesses: number[] = [];
 
@@ -40,17 +39,13 @@ export default async function handler(
         command = "cmd.exe";
         args = [
           "/c",
-          condaEnv === "python"
-            ? `"python ${node.data.projectPath}`
-            : `"conda activate ${condaEnv} && cd ${path.dirname(
-                node.data.projectPath
-              )} && python ${path.basename(node.data.projectPath)}`,
+          `conda activate ${condaEnv} && python ${node.data.projectPath}`,
           `id=${5000 + Number(node.id)}`,
           `order=${orderedSequence.map((o) => 5000 + Number(o)).join("-")}`,
           `from=${
             5000 +
             Number(orderedSequence[orderedSequence.indexOf(node.id) - 1] || 0)
-          }"`,
+          }`,
         ];
       } else {
         // macOS or Linux: activate Conda environment and run Python script
@@ -58,19 +53,16 @@ export default async function handler(
         const activate = condaEnv.endsWith("/bin/activate") ? '' : 'activate'; // env : conda
         args = [
           "-c",
-          condaEnv === "python"
-            ? `"python ${node.data.projectPath}`
-            : `"source ${activate} ${condaEnv}&&cd ${path.dirname(
-                node.data.projectPath
-              )}&&python ${path.basename(node.data.projectPath)}`,
-          `--id ${5000 + Number(node.id)}`,
-          `--order ${orderedSequence.map((o) => 5000 + Number(o)).join("-")}`,
-          `--from ${
+          `"source ${activate} ${condaEnv} && python ${node.data.projectPath}`,
+          `id=${5000 + Number(node.id)}`,
+          `order=${orderedSequence.map((o) => 5000 + Number(o)).join("-")}`,
+          `from=${
             5000 +
             Number(orderedSequence[orderedSequence.indexOf(node.id) - 1] || 0)
           }"`,
         ];
       }
+
       const child = spawn(command, args, { shell: true });
 
       // Store the PID of the running process
@@ -89,7 +81,7 @@ export default async function handler(
         console.log(`Process exited with code: ${code}`);
       });
     });
-
+    
     setTimeout(() => {
       (async function () {
         const result = await fetch(
