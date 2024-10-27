@@ -8,7 +8,7 @@ def handler(inputs):
         "view": {
             # "text": "Vesuvius Challenge",
             # "image": "/Users/yao/Desktop/test.png",
-            "obj": "/Users/yao/Desktop/cube.obj",
+            "obj": "/Users/yao/Desktop/test.obj",
             # "nrrd": "/Users/yao/Desktop/cube.nrrd",
             
         },
