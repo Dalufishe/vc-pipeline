@@ -17,11 +17,13 @@ export default function View({ result }) {
       fetchImages(imagePaths).then((data) => {
         setImages(data);
       });
-    } else if (objPaths) {
+    }
+    if (objPaths) {
       fetchBuffers(objPaths).then((data) => {
         setObjs(data);
       });
-    } else if (nrrdPaths) {
+    }
+    if (nrrdPaths) {
       fetchBuffers(nrrdPaths).then((data) => {
         setNrrds(data);
       });

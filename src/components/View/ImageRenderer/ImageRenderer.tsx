@@ -5,5 +5,5 @@ type Props = {
 };
 
 export default function ImageRenderer(props: Props) {
-  return props.data.images?.map((image) => <img src={image?.url} />);
+  return props.data.images?.map((image, i) => <img key={i} src={image?.url} />);
 }

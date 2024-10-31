@@ -26,11 +26,13 @@ export default function ObjRenderer({ data }) {
   const style = {};
   style.backgroundColor = 'rgba(1, 1, 1, 0.3)';
 
-  if (data?.objSrc) {
+  console.log(data)
+
+  if (data?.objs.length) {
     return (
       <Canvas frameloop="demand" camera={camera} gl={gl} style={style}>
         <Controls />
-        <Model objSrc={data.objSrc} />
+        <Model objSrc={data.objs[0].url} />
       </Canvas>
     );
   }
