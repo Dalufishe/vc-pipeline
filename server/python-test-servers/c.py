@@ -7,10 +7,18 @@ def handler(inputs):
         "data": {"counter": inputs["data"]["counter"] + 1},
         "view": {
             # "text": "Vesuvius Challenge",
-            # "image": "/Users/yao/Desktop/test.png",
-            "obj": "/Users/yao/Desktop/test.obj",
-            # "nrrd": "/Users/yao/Desktop/cube.nrrd",
-            
+            "image": [
+                "D:/vesuvius-project/vc-pipeline/public/ferrari.webp",
+                "D:/vesuvius-project/vc-pipeline/public/roxy.jpeg",
+            ],
+            # "obj": [
+            #    "D:/vesuvius-project/vc-pipeline/public/1.nrrd",
+            #    "D:/vesuvius-project/vc-pipeline/public/2.nrrd",
+            # ],
+            # "nrrd": [
+            #     "D:/vesuvius-project/vc-pipeline/public/1.nrrd",
+            #     "D:/vesuvius-project/vc-pipeline/public/2.nrrd",
+            # ],
         },
     }
 

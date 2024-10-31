@@ -1,9 +1,9 @@
 import React from "react";
 
 type Props = {
-  data: { imageSrc: string };
+  data: { images: string };
 };
 
 export default function ImageRenderer(props: Props) {
-  return <img src={props.data.imageSrc} />;
+  return props.data.images?.map((image) => <img src={image?.url} />);
 }
