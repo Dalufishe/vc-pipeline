@@ -1,21 +1,30 @@
 # VC pipeline
 
-### 資料溝通標準
+### spec
 
-#### 格式
+#### format
 
-```js
+```python
 {
-    // data 用於在 pipeline 中傳遞資料
+    # pipeline intermediate input & output information
     "data": {
-        // ...傳遞的任何資料, 可以是任何 json 物件結構
+        # ... can be any info & structure in json format
     },
-    // view 用於在顯示預覽
+    # pipeline visualization data path (text, image, obj, nrrd)
     "view": {
-        // 文字預覽
         "text": "Vesuvius Challenge 2024",
-        // 圖片預覽 (指定圖片路徑)
-        "image": "D:/vesuvius-project/vc-pipeline/public/ferrari.webp",
+        "image": [
+            "D:/vesuvius-project/vc-pipeline/public/ferrari.webp",
+            ...
+        ],
+        "obj": [
+            "D:/vesuvius-project/vc-pipeline/public/segment.obj",
+            ...
+        ],
+        "nrrd": [
+            "D:/vesuvius-project/vc-pipeline/public/volume.nrrd",
+            ...
+        ]
     }
 }
 ```
