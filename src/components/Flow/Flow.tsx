@@ -10,14 +10,17 @@ import {
   useNodesState,
 } from "@xyflow/react";
 import Card from "../Card/Card";
+import View from "../View/View";
 import { useFlowData } from "@/provider/FlowProvider";
 
-const nodeTypes = { card: Card };
+const nodeTypes = { card: Card, view: View };
 
 export default function Flow() {
   // Flow 資料
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+
+  console.log(nodes, edges);
 
   // 初始化
   useEffect(() => {

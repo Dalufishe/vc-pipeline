@@ -3,7 +3,7 @@ import { ContextMenu } from "@radix-ui/themes";
 import { useFlowData } from "@/provider/FlowProvider";
 import { MouseEvent, useState } from "react";
 import Head from "next/head";
-import View from "@/components/View/View";
+// import View from "@/components/View/View";
 
 export default function Home() {
   const { nodes, edges } = useFlowData();
@@ -31,7 +31,7 @@ export default function Home() {
           </div>
         }
       />
-      <View result={result} />
+      {/* <View result={result} /> */}
     </div>
   );
 }
@@ -61,6 +61,23 @@ function HomePageContextMenu(props: {
             data: {
               pythonPath: "",
               projectPath: "",
+            },
+          },
+        ]);
+      },
+    },
+    {
+      title: "Insert View Node",
+      shortcut: "⌘ V",
+      handler: (e: MouseEvent<HTMLDivElement, MouseEvent>) => {
+        setNodes([
+          ...nodes,
+          {
+            id: String(nodes.length + 1),
+            position: { x: e.clientX, y: e.clientY },
+            type: "view",
+            data: {
+              viewPath: "",
             },
           },
         ]);

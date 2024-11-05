@@ -1,14 +1,13 @@
-import * as THREE from 'three';
+import * as THREE from "three";
 import React from "react";
-import { useEffect, useState } from 'react';
-import { Canvas, useLoader } from '@react-three/fiber';
-import Controls from './Controls';
-import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
+import { useEffect, useState } from "react";
+import { Canvas, useLoader } from "@react-three/fiber";
+import Controls from "./Controls";
+import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader";
 
 type Props = {
   data: { objSrc: string };
 };
-
 
 export default function ObjRenderer({ data }) {
   const gl = {};
@@ -24,16 +23,18 @@ export default function ObjRenderer({ data }) {
   camera.position = [0, 0, -1.5];
 
   const style = {};
-  style.backgroundColor = 'rgba(1, 1, 1, 0.3)';
+  style.backgroundColor = "rgba(1, 1, 1, 0.3)";
 
-  console.log(data)
+  console.log(data);
 
   if (data?.objs.length) {
     return (
-      <Canvas frameloop="demand" camera={camera} gl={gl} style={style}>
+      <>
+        {/* <Canvas frameloop="demand" camera={camera} gl={gl} style={style}> */}
         <Controls />
         <Model objSrc={data.objs[0].url} />
-      </Canvas>
+        {/* </Canvas> */}
+      </>
     );
   }
   return null;
@@ -59,4 +60,3 @@ function Model({ objSrc }) {
 
   return <primitive object={obj} />;
 }
-

@@ -14,6 +14,8 @@ export default async function handler(
     const edges = body.edges;
     const orderedSequence = getOrderedSequence(edges);
 
+    console.log(orderedSequence);
+
     // Kill any previously running processes
     runningProcesses.forEach((pid) => {
       try {
@@ -50,7 +52,7 @@ export default async function handler(
       } else {
         // macOS or Linux: activate Conda environment and run Python script
         command = "bash";
-        const activate = condaEnv.endsWith("/bin/activate") ? '' : 'activate'; // env : conda
+        const activate = condaEnv.endsWith("/bin/activate") ? "" : "activate"; // env : conda
         args = [
           "-c",
           `"source ${activate} ${condaEnv} && python ${node.data.projectPath}`,
@@ -81,7 +83,7 @@ export default async function handler(
         console.log(`Process exited with code: ${code}`);
       });
     });
-    
+
     setTimeout(() => {
       (async function () {
         const result = await fetch(

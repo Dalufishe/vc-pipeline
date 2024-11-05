@@ -1,75 +1,109 @@
-import React, { useEffect, useState } from "react";
-import ImageRenderer from "./ImageRenderer/ImageRenderer";
+import { useFlowData } from "@/provider/FlowProvider";
+import {
+  AlertDialog,
+  Button,
+  Flex,
+  IconButton,
+  Text,
+  TextField,
+} from "@radix-ui/themes";
+import { Handle, Node, NodeProps, Position } from "@xyflow/react";
+import { useEffect, useState } from "react";
+import { BsThreeDots } from "react-icons/bs";
+import { Canvas } from "@react-three/fiber";
+import Controls from "./ObjRenderer/Controls";
 import ObjRenderer from "./ObjRenderer/ObjRenderer";
-import NrrdRenderer from "./NrrdRenderer/NrrdRenderer";
 
-export default function View({ result }) {
-  const [images, setImages] = useState([]);
+export type ViewNode = Node<
+  {
+    viewPath?: string;
+  },
+  "view"
+>;
+
+export default function View(props: NodeProps<ViewNode>) {
+  const viewId = props.id;
+
+  const { nodes, setNodes } = useFlowData();
+
+  const [viewPath, setViewPath] = useState(props.data.viewPath);
+
   const [objs, setObjs] = useState([]);
-  const [nrrds, setNrrds] = useState([]);
 
   useEffect(() => {
-    const imagePaths = result?.data?.view?.image;
-    const objPaths = result?.data?.view?.obj;
-    const nrrdPaths = result?.data?.view?.nrrd;
+    const objPaths = [viewPath];
 
-    if (imagePaths) {
-      fetchImages(imagePaths).then((data) => {
-        setImages(data);
-      });
-    }
     if (objPaths) {
       fetchBuffers(objPaths).then((data) => {
         setObjs(data);
       });
     }
-    if (nrrdPaths) {
-      fetchBuffers(nrrdPaths).then((data) => {
-        setNrrds(data);
-      });
-    }
-  }, [result]);
+  }, []);
 
   return (
-    <div className="w-[400px] h-[320px] absolute right-0 top-0 bg-white">
-      {/* {result?.data?.view?.text} */}
-      {images && <ImageRenderer data={{ images }} />}
-      {objs && <ObjRenderer data={{ objs }} />}
-      {nrrds && <NrrdRenderer data={{ nrrds }} />}
-    </div>
+    <>
+      <Handle type="target" position={Position.Left} />
+      <div className="w-96 h-96 text-black bg-white rounded-xl p-4 flex flex-col gap-2">
+        <div className="flex justify-between">
+          {/* 檔案名稱 */}
+          <h3 className="text-xl">
+            {viewPath
+              ? viewPath.split("/")[viewPath.split("/").length - 2] +
+                "/" +
+                viewPath.split("/")[viewPath.split("/").length - 1]
+              : "Empty"}
+          </h3>
+          <AlertDialog.Root>
+            <AlertDialog.Trigger>
+              <IconButton size="1">
+                <BsThreeDots />
+              </IconButton>
+            </AlertDialog.Trigger>
+            <AlertDialog.Content maxWidth="450px">
+              <AlertDialog.Title>View Path</AlertDialog.Title>
+              <AlertDialog.Description size="2">
+                <TextField.Root
+                  value={viewPath}
+                  onChange={(e) => {
+                    setViewPath(e.target.value);
+                    setTimeout(() => {
+                      setNodes(
+                        nodes.map((node) => {
+                          if (node.id === viewId)
+                            return {
+                              ...node,
+                              data: { viewPath: e.target.value },
+                            };
+                          else return node;
+                        })
+                      );
+                    });
+                  }}
+                />
+              </AlertDialog.Description>
+              <Flex gap="3" mt="4" justify="end">
+                <AlertDialog.Cancel>
+                  <Button variant="soft" color="gray">
+                    Cancel
+                  </Button>
+                </AlertDialog.Cancel>
+              </Flex>
+            </AlertDialog.Content>
+          </AlertDialog.Root>
+        </div>
+        <Canvas className="w-full h-full flex justify-between items-center gap-10">
+          {/* <Controls />
+          <mesh>
+            <torusKnotGeometry />
+            <meshNormalMaterial />
+          </mesh> */}
+          {objs.length && <ObjRenderer data={{ objs }} />}
+        </Canvas>
+      </div>
+      <Handle type="source" position={Position.Right} id="a" />
+    </>
   );
 }
-const fetchImages = async (imagePaths: string[]) => {
-  try {
-    const imageURLs = await Promise.all(
-      imagePaths.map(async (imagePath) => {
-        try {
-          const response = await fetch(
-            `/api/view/image?imagePath=${encodeURIComponent(imagePath)}`
-          );
-
-          if (!response.ok) {
-            throw new Error(`Network response was not ok for ${imagePath}`);
-          }
-
-          // Retrieve the response as a Blob for direct image data handling
-          const imageBlob = await response.blob();
-          const imageObjectURL = URL.createObjectURL(imageBlob);
-
-          return { path: imagePath, url: imageObjectURL };
-        } catch (error) {
-          console.error(`Error fetching the image at ${imagePath}:`, error);
-          return null; // Return null for failed fetches
-        }
-      })
-    );
-
-    // Filter out any null results from failed requests
-    return imageURLs.filter((result) => result !== null);
-  } catch (error) {
-    console.error("Error processing image paths:", error);
-  }
-};
 
 const fetchBuffers = async (filePaths: string[]) => {
   try {
