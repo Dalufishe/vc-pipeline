@@ -10,22 +10,21 @@ import {
   useNodesState,
 } from "@xyflow/react";
 import Card from "../Card/Card";
-import View from "../View/View";
 import { useFlowData } from "@/provider/FlowProvider";
+import getNodeOrderedSequence from "@/utils/getNodeOrderedSequence";
+import ViewCard from "../Card/ViewCard/ViewCard";
 
-const nodeTypes = { card: Card, view: View };
+const nodeTypes = { card: Card, view: ViewCard };
 
 export default function Flow() {
   // Flow 資料
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
 
-  console.log(nodes, edges);
-
   // 初始化
   useEffect(() => {
-    setNodes(JSON.parse(localStorage.getItem("nodes")));
-    setEdges(JSON.parse(localStorage.getItem("edges")));
+    setNodes(JSON.parse(localStorage.getItem("nodes")) || []);
+    setEdges(JSON.parse(localStorage.getItem("edges")) || []);
   }, []);
 
   // 同步狀態
@@ -54,6 +53,8 @@ export default function Flow() {
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
         nodeTypes={nodeTypes}
+        noDragClassName="react-flow-no-drag"
+        noWheelClassName="react-flow-no-wheel"
       >
         <MiniMap />
         <Controls />
@@ -62,31 +63,3 @@ export default function Flow() {
     </div>
   );
 }
-
-// function getOrderedSequence(edges) {
-//   const sources = new Set();
-//   const targets = new Set();
-
-//   // 建立 sources 和 targets 的集合
-//   edges.forEach((edge) => {
-//     sources.add(edge.source);
-//     targets.add(edge.target);
-//   });
-
-//   // 找到最初的 source (它不在 targets 裡)
-//   let start = [...sources].find((source) => !targets.has(source));
-
-//   // 按順序連接 source 和 target
-//   const sequence = [start];
-//   while (start) {
-//     const nextEdge = edges.find((edge) => edge.source === start);
-//     if (nextEdge) {
-//       sequence.push(nextEdge.target);
-//       start = nextEdge.target;
-//     } else {
-//       break;
-//     }
-//   }
-
-//   return sequence;
-// }

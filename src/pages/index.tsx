@@ -43,11 +43,11 @@ function HomePageContextMenu(props: {
   const { nodes, setNodes } = useFlowData();
 
   const menus = [
-    {
-      title: "Start Flow",
-      shortcut: "⌘ Enter",
-      handler: props.onFlowStart,
-    },
+    // {
+    //   title: "Start Flow",
+    //   shortcut: "⌘ Enter",
+    //   handler: props.onFlowStart,
+    // },
     {
       title: "Insert Node",
       shortcut: "⌘ I",

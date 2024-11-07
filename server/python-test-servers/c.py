@@ -9,7 +9,7 @@ def handler(inputs):
             # "text": "Vesuvius Challenge",
             "image": [
                 "D:/vesuvius-project/vc-pipeline/public/ferrari.webp",
-                "D:/vesuvius-project/vc-pipeline/public/roxy.jpeg",
+                # "D:/vesuvius-project/vc-pipeline/public/roxy.jpeg",
             ],
             # "obj": [
             #    "D:/vesuvius-project/vc-pipeline/public/1.nrrd",

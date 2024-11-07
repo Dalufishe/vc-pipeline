@@ -4,14 +4,12 @@ import {
   Button,
   Flex,
   IconButton,
-  Text,
   TextField,
 } from "@radix-ui/themes";
 import { Handle, Node, NodeProps, Position } from "@xyflow/react";
 import { useEffect, useState } from "react";
 import { BsThreeDots } from "react-icons/bs";
 import { Canvas } from "@react-three/fiber";
-import Controls from "./ObjRenderer/Controls";
 import ObjRenderer from "./ObjRenderer/ObjRenderer";
 
 export type ViewNode = Node<
@@ -46,7 +44,7 @@ export default function View(props: NodeProps<ViewNode>) {
       <div className="w-96 h-96 text-black bg-white rounded-xl p-4 flex flex-col gap-2">
         <div className="flex justify-between">
           {/* 檔案名稱 */}
-          <h3 className="text-xl">
+          <h3 className="text-xl whites">
             {viewPath
               ? viewPath.split("/")[viewPath.split("/").length - 2] +
                 "/" +

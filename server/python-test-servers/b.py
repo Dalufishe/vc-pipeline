@@ -1,5 +1,6 @@
 from pipeline_api import Node
 
+
 def handler(inputs):
     return {**inputs, "data": {"counter": inputs["data"]["counter"] + 2}}
 
