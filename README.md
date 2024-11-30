@@ -25,6 +25,14 @@ The execution results of these scripts are displayed in the View Card (yellow on
 
 Below are examples of `a.py`, `b.py`, and `c.py`, demonstrating how data is passed from `a.py` to `b.py`, and then processed in `b.py` before being passed to `c.py`, which ultimately returns the final result.
 
+#### Install `pipeline_api`
+
+Before you begin, you'll need to install the pipeline_api package. You can install it using pip:
+
+```bash
+pip install pipeline_api
+```
+
 #### `a.py` - Provide Data
 
 ```py
